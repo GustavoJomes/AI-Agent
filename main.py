@@ -1,6 +1,7 @@
 
 from ollama import Client
 from tools import get_weather
+from agent import parse_action, execute_action
 
 client = Client(host="http://localhost:11434")
 
@@ -66,6 +67,19 @@ print(response.message.content)
 
 print(response.model_dump())
 
-print("\n--- TOOL TEST ---")
-observation = get_weather("London")
-print("Observation:", observation)
+print("\n--- LLM RESPONSE ---")
+print(response.message.content)
+
+try:
+    action_data = parse_action(response.message.content)
+
+    print("\n--- PARSED ACTION ---")
+    print(action_data)
+
+    observation = execute_action(action_data)
+
+    print("\n--- OBSERVATION ---")
+    print(observation)
+
+except (ValueError, TypeError, KeyError) as error:
+    print(f"\nAgent error: {error}")
