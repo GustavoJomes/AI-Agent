@@ -1,5 +1,6 @@
 
 from ollama import Client
+from tools import get_weather
 
 client = Client(host="http://localhost:11434")
 
@@ -64,3 +65,7 @@ response = client.chat(
 print(response.message.content)
 
 print(response.model_dump())
+
+print("\n--- TOOL TEST ---")
+observation = get_weather("London")
+print("Observation:", observation)
